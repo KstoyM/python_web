@@ -1,0 +1,37 @@
+body {
+    background: #F0F1F5;
+    margin: 0;
+    font-family: sans-serif;
+    padding: 2rem 12rem;
+
+}
+
+header > p {
+    float:left;
+    color: orange;
+}
+
+nav {
+    text-align: right;
+    float: right;
+}
+
+nav ul li{
+    display: inline-block;
+    padding: 0 8px;
+
+}
+
+nav ul li a {
+    color: orange;
+    text-decoration: none;
+
+}
+
+main section:nth-child(1) {
+    margin-top: 3rem;
+    background-image: url("Introduction-to-CSS-Lab/L2_01_Fitness-Site/Requirements-and-Resources/Images/picture.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 11rem 11rem;
+}
