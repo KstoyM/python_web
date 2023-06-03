@@ -30,8 +30,37 @@ nav ul li a {
 
 main section:nth-child(1) {
     margin-top: 3rem;
-    background-image: url("Introduction-to-CSS-Lab/L2_01_Fitness-Site/Requirements-and-Resources/Images/picture.jpg");
+    background-image: url("../Requirements-and-Resources/Images/picture.jpg");
     background-size: cover;
+    text-align: center;
     background-position: center;
-    padding: 11rem 11rem;
+    padding: 18rem 11rem;
+    color: white;
+}
+
+main section span {
+    color:orange;
+}
+
+main section button {
+    background-color: orange;
+    margin-left: 80px;
+    border: none;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+main section:nth-child(2) article {
+    background-color: orange;
+    color: white;
+    width: 29%;
+    display: inline-block;
+    padding: 20px;
+}
+
+main section:nth-child(2) {
+    text-align: center;
+    margin: 1rem -1rem;
 }
