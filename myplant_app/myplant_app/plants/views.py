@@ -4,8 +4,11 @@ from django.shortcuts import render
 
 # Create your views here.
 
-def index(request):
-    return HttpResponse("index")
+def home_page(request):
+    profile = ProfileModel.objects.first()
+    context = {'profile': profile}
+
+    return render(request, template_name='home-page.html', context=context)
 
 
 def create(request):

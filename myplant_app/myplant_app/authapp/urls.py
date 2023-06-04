@@ -3,9 +3,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('profile/', include([
-        path('create/', create, name='profile-create-page'),
-        path('details/', details, name='profile-details-page'),
-        path('edit/', edit, name='profile-edit-page'),
-        path('delete/', delete, name='profile-delete-page'),
+        path('create/', create, name='create-profile'),
+        path('details/', details, name='profile-details'),
+        path('edit/', edit, name='edit-profile'),
+        path('delete/', delete, name='delete-profile'),
     ]))
 ]
