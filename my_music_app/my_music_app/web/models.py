@@ -64,7 +64,8 @@ class Album(models.Model):
         max_length=MAX_LEN_NAME,
         null=False,
         blank=False,
-        unique=True
+        unique=True,
+        verbose_name='Album Name'
     )
 
     artist = models.CharField(
@@ -72,7 +73,7 @@ class Album(models.Model):
         null=False,
         blank=False
 
-   )
+    )
 
     genre = models.CharField(
         max_length=MAX_LEN_GENRE,
@@ -88,7 +89,8 @@ class Album(models.Model):
 
     image_url = models.URLField(
         null=False,
-        blank=False
+        blank=False,
+        verbose_name='Image URL',
     )
 
     price = models.FloatField(
