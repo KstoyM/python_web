@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from my_music_app.web.forms import ProfileCreateForm, AlbumCreateForm, AlbumEditForm, AlbumDeleteForm
+from my_music_app.web.forms import ProfileCreateForm, AlbumCreateForm, AlbumEditForm, AlbumDeleteForm, ProfileDeleteForm
 from my_music_app.web.models import Profile, Album
 
 
@@ -17,7 +17,7 @@ def home_page(request):
     profile = get_profile()
 
     if profile is None:
-        return redirect('add profile')
+        return add_profile(request)
 
     context = {
         'albums': Album.objects.all()
@@ -90,7 +90,14 @@ def delete_album(request, pk):
 
 
 def details_profile(request):
-    return render(request, 'profile-details.html')
+    profile = get_profile()
+    albums_count = Album.objects.count()
+
+    context = {
+        'profile': profile,
+        'albums_count': albums_count
+    }
+    return render(request, 'profile-details.html', context)
 
 
 def add_profile(request):
@@ -107,9 +114,22 @@ def add_profile(request):
 
     context = {
         'form': form,
+        'hide_nav_links': True
     }
     return render(request, 'home-no-profile.html', context)
 
 
 def delete_profile(request):
-    return render(request, 'profile-delete.html')
+    profile = get_profile()
+    if request.method == 'GET':
+        form = ProfileDeleteForm(instance=profile)
+    else:
+        form = ProfileDeleteForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('home_page')
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'profile-delete.html', context)
