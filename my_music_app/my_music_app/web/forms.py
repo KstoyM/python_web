@@ -2,13 +2,16 @@ from django import forms
 
 from my_music_app.web.models import Profile, Album
 
+
 class ProfileBaseForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = '__all__'
 
+
 class ProfileCreateForm(ProfileBaseForm):
     pass
+
 
 class ProfileDeleteForm(ProfileBaseForm):
     def __init__(self, *args, **kwargs):
