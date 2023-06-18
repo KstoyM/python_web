@@ -8,7 +8,7 @@ from my_music_app.web.models import Profile, Album
 
 def get_profile():
     try:
-        return Profile.objects.get()
+        return Profile.objects.first()
     except Profile.DoesNotExist as ex:
         return None
 
