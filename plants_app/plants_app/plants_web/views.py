@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from plants_app.plants_web.forms import ProfileForm, PlantBaseForm, PlantDeleteForm, ProfileBaseForm
+from plants_app.plants_web.models import ProfileModel, PlantModel
 
 
 # •	http://localhost:8000/ - home page
@@ -14,41 +16,153 @@ from django.shortcuts import render
 
 # Create your views here.
 
+def get_profile():
+    try:
+        return ProfileModel.objects.first()
+    except ProfileModel.DoesNotExist as ex:
+        return None
+
+
 def home_page(request):
+    if get_profile():
+        context = {
+            'profile': get_profile(),
+        }
+        return render(request, 'home-page.html', context=context)
+
     return render(request, 'home-page.html')
 
 
 def create_profile(request):
-    return render(request, 'create-profile.html')
+    if request.method == 'GET':
+        form = ProfileForm()
+    else:
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'create-profile.html', context=context)
 
 
 def details_profile(request):
-    return render(request, 'profile-details.html')
+    stars_count = PlantModel.objects.all().count()
+
+    profile = get_profile()
+    context = {
+        'profile': profile,
+        'stars_count': stars_count,
+    }
+    return render(request, 'profile-details.html', context=context)
 
 
 def edit_profile(request):
-    return render(request, 'edit-profile.html')
+    if request.method == 'GET':
+        form = ProfileBaseForm(instance=get_profile())
+    else:
+        form = ProfileBaseForm(request.POST, instance=get_profile())
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        'form': form,
+        'profile': get_profile(),
+    }
+
+    return render(request, 'edit-profile.html', context=context)
 
 
 def delete_profile(request):
-    return render(request, 'delete-profile.html')
+    profile = get_profile()
+    plants = PlantModel.objects.all()
+
+    if request.method == 'POST':
+        profile.delete()
+        plants.delete()
+
+        return redirect('home_page')
+
+    context = {
+        'profile': profile
+    }
+
+    return render(request, 'delete-profile.html', context=context)
 
 
 def catalogue(request):
-    return render(request, 'catalogue.html')
+    profile = get_profile()
+    plants = PlantModel.objects.all()
+
+    context = {
+        'profile': profile,
+        'plants': plants,
+    }
+
+    return render(request, 'catalogue.html', context=context)
 
 
 def create_plant(request):
-    return render(request, 'create-plant.html')
+    profile = get_profile()
+
+    if request.method == 'GET':
+        form = PlantBaseForm()
+    else:
+        form = PlantBaseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        'profile:': profile,
+        'form': form,
+    }
+
+    return render(request, 'create-plant.html', context=context)
 
 
-def details_plant(request):
-    return render(request, 'plant-details.html')
+def details_plant(request, pk):
+    plant = PlantModel.objects.filter(pk=pk).get()
+    context = {
+        'plant': plant,
+        'profile': get_profile(),
+    }
+
+    return render(request, 'plant-details.html', context=context)
 
 
-def edit_plant(request):
-    return render(request, 'edit-plant.html')
+def edit_plant(request, pk):
+    if request.method == 'GET':
+        form = PlantBaseForm(instance=PlantModel.objects.filter(pk=pk).get())
+    else:
+        form = PlantBaseForm(request.POST, instance=PlantModel.objects.filter(pk=pk).get())
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        'form': form,
+        'profile': get_profile(),
+    }
+    return render(request, 'edit-plant.html', context=context)
 
 
-def delete_plant(request):
-    return render(request, 'delete-plant.html')
+def delete_plant(request, pk):
+    if request.method == 'GET':
+        form = PlantDeleteForm(instance=PlantModel.objects.filter(pk=pk).get())
+    else:
+        form = PlantDeleteForm(request.POST, instance=PlantModel.objects.filter(pk=pk).get())
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        'form': form,
+        'profile': get_profile(),
+    }
+
+    return render(request, 'delete-plant.html', context=context)

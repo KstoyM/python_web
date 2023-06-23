@@ -1,7 +1,6 @@
 from django.urls import path, include
-
-
-
+from .views import home_page, create_profile, details_profile, edit_profile, delete_profile, catalogue, create_plant, \
+    details_plant, edit_plant, delete_plant
 
 urlpatterns = [
     path("", home_page, name="home_page"),
