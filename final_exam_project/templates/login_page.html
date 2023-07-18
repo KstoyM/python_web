@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="login-register-div" style="margin: 0 auto; width: 250px">
+    <div class="login-register-box">
+        <h1>Rent-A-Car</h1>
+
+        <form action="{% url 'login_user' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+
+            <button type="submit">Register</button>
+        </form>
+
+    </div>
+    <div class="second-option">
+        <p>Don' have an account? <a href="{% url 'register_user' %}">Register</a></p>
+    </div>
+</div>
+
+{% endblock %}
