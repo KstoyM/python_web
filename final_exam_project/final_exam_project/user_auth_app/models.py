@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.core import exceptions
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -16,13 +17,48 @@ def validate_string_only_letters(value):
             raise exceptions.ValidationError('Ensure this value contains only letters.')
 
 
-class User(auth_models.AbstractUser):
+class AppUserManager(auth_models.BaseUserManager):
+    use_in_migrations = True
+
+    def _create_user(self, username, email, password, **extra_fields):
+        """
+        Create and save a user with the given username, email, and password.
+        """
+        if not username:
+            raise ValueError("The given username must be set")
+        email = self.normalize_email(email)
+
+        user = self.model(username=username, email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(username, email, password, **extra_fields)
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self._create_user(username, email, password, **extra_fields)
+
+
+class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
     FIRST_NAME_MIN_LEN = 2
     FIRST_NAME_MAX_LEN = 30
     LAST_NAME_MIN_LEN = 2
     LAST_NAME_MAX_LEN = 30
     USERNAME_MIN_LEN = 2
     USERNAME_MAX_LEN = 30
+
+    objects = AppUserManager()
 
     username = models.CharField(
         max_length=USERNAME_MAX_LEN,
@@ -46,3 +82,4 @@ class User(auth_models.AbstractUser):
     email = models.EmailField(unique=True)
     age = models.PositiveIntegerField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
+    is_staff = models.BooleanField(default=False)

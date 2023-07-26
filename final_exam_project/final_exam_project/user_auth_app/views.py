@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.views import generic as views
 from django.contrib.auth import views as auth_views, login, get_user_model
@@ -33,20 +34,10 @@ class RegisterUserView(views.CreateView):
     def form_valid(self, form):
         result = super().form_valid(form)
 
+
         login(self.request, self.object)
 
         return result
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #
-    #     context['next'] = self.request.GET.get('next', '')
-    #
-    #     return context
-    #
-    # def get_success_url(self):
-    #
-    #     return self.request.POST.get('next', self.success_url)
 
 
 class LoginUserView(auth_views.LoginView):
@@ -60,14 +51,34 @@ class LogoutUserView(auth_views.LogoutView):
     next_page = reverse_lazy('index_page')
 
 
-def details_profile(request, pk):
-    user_profile = get_user_model().objects.get(pk=pk)
-    return render(request, 'details_profile.html', {'user_profile': user_profile})
+# def details_profile(request, pk):
+#     user_profile = get_user_model().objects.get(pk=pk)
+#     return render(request, 'details_profile.html', {'user_profile': user_profile})
 
 
-def edit_profile(request):
-    return render(request, 'edit_profile.html')
+class DetailsProfileView(views.DetailView):
+    template_name = 'details_profile.html'
+    model = get_user_model()
+
+    def get_context_data(self, **kwargs):
+        profile_image = static('images/profile_image.jpg')
+
+        if self.object.profile_image is not None:
+            profile_image = self.object.profile_image
+
+        context = super().get_context_data(**kwargs)
+        context['profile_image'] = profile_image
+        return context
 
 
-def delete_profile(request):
-    return render(request, 'delete_profile.html')
+class ProfileEditView(views.UpdateView):
+    template_name = 'edit_profile.html'
+    model = get_user_model()
+    fields = ('username', 'email')
+    success_url = reverse_lazy('index_page')
+
+
+class ProfileDeleteView(views.DeleteView):
+    template_name = 'delete_profile.html'
+    model = get_user_model()
+    success_url = reverse_lazy('index_page')

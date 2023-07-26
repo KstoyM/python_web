@@ -1,0 +1,56 @@
+.contact_page_main {
+    min-height: 700px;
+    background: url(../images/Rimac.png) no-repeat;
+    background-size: 78%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-us-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: auto;
+    background-color: rgba(79, 116, 115, 0.8);
+    padding: 40px;
+    border-radius: 3px;
+    box-shadow: 1px 2px 3px #888888;
+}
+
+.contact-us-box {
+    font-family: sans-serif;
+    flex: 1;
+    width: 339px;
+    height: 800px;
+}
+
+.contact-us-box h2 {
+    font-family: 'sans-serif', cursive;
+    font-size: 40px;
+    text-align: center;
+    margin-top: -10px;
+}
+
+.contact-us-box input {
+    background-color: rgb(240, 230, 230);
+    border: 0.1px solid rgb(186, 184, 184);
+    border-radius: 3px;
+    height: 30px;
+    width: 100%;
+    padding-left: 2px;
+    margin-top: 10px;
+}
+
+.contact-us-box button {
+    background-color: rgb(2, 37, 62);
+    color: rgb(240, 241, 245);
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    border-radius: 30px;
+    margin-top: 10px;
+    height: 30px;
+    font-size: 17px;
+}
+

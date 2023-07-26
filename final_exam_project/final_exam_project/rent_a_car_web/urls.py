@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import index_page, cars_page, rents_page, contact_page, about_page, \
+from .views import index_page, cars_page, rents_page, ContactPageView, \
     add_car, details_car, edit_car, delete_car, add_rent, details_rent, edit_rent, delete_rent
 
 urlpatterns = [
@@ -22,6 +22,5 @@ urlpatterns = [
         path('rents/delete/<int:pk>/', delete_rent, name='delete_rent'),
     ])),
 
-    path('contact/', contact_page, name='contact_page'),
-    path('about/', about_page, name='about_page'),
+    path('contact/', ContactPageView.as_view(), name='contact_page'),
 ]
