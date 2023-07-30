@@ -11,6 +11,7 @@
 @import url('https://fonts.googleapis.com/css?family=Rajdhani:300,400,500,600,700');
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
 @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Croissant+One&family=Great+Vibes&family=Lato&family=Montserrat:wght@300;400&family=PT+Serif:ital@1&family=Tangerine:wght@700&display=swap');
 
 /*****---------------------------------------- 1) font-family: 'Rajdhani', sans-serif;
  2) font-family: 'Poppins', sans-serif;
@@ -22,6 +23,7 @@
 @import url(normalize.css);
 @import 'login.css';
 @import 'contact_us.css';
+@import 'details.css';
 
 
 /*--------------------------------------------------------------------- skeleton ---------------------------------------------------------------------*/
@@ -96,24 +98,6 @@ h6 {
      font-size: 13px
 }
 
-*,
-*::after,
-*::before {
-     -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-     box-sizing: border-box;
-}
-
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
-     color: #212121;
-     text-decoration: none!important;
-     opacity: 1
-}
 
 button:focus {
      outline: none;
@@ -274,6 +258,7 @@ button {
 }
 
 .navigation.navbar-dark .navbar-nav .nav-link {
+     font-family: 'Croissant One', cursive;
      padding: 0 25px;
      color: #000;
      font-size: 16px;
@@ -283,6 +268,7 @@ button {
 
 .navigation.navbar-dark .navbar-nav .nav-link:focus,
 .navigation.navbar-dark .navbar-nav .nav-link:hover {
+     font-family: 'Croissant One', cursive;
      color: #f6d601;
 }
 
@@ -290,6 +276,7 @@ button {
 .navigation.navbar-dark .navbar-nav .nav-link.active,
 .navigation.navbar-dark .navbar-nav .nav-link.show,
 .navigation.navbar-dark .navbar-nav .show>.nav-link {
+     font-family: 'Croissant One', cursive;
      color: #f6d601;
 }
 

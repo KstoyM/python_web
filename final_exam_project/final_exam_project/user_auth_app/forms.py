@@ -12,10 +12,12 @@ class RegisterUserForm(auth_forms.UserCreationForm):
 
     class Meta:
         model = UserModel
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
         labels = {
             'username': 'Username',
             'email': 'Email',
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
             'password1': 'Password',
             'password2': 'Confirm Password',
         }
@@ -31,4 +33,20 @@ class LoginUserForm(auth_forms.AuthenticationForm):
         labels = {
             'username': 'Username',
             'password': 'Password',
+        }
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = UserModel
+        fields = '__all__'
+        labels = {
+            'username': 'Username',
+            'email': 'Email',
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+            'profile_picture': 'Profile Picture',
+            # TODO: Make a custom password change view
+            'password1': 'Password1',
+            'password2': 'Password2',
         }

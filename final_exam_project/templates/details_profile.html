@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-    <h1>Home</h1>
-    <p> Welcome to the home page!</p>
+
+    <section id="profile-details">
+        <h1>Profile Details</h1>
+        <div class="info-section">
+            <div class="profile-header">
+
+                    {% if user.profile_picture == None %}
+                    <img class="profile-img" src="{% static 'images/default.jpg' %}" alt='profile-image'/>
+                    {% else %}
+                    <img class="profile-img" src="{{ user.profile_picture }}" alt='profile-image'/>
+                    {% endif %}
+
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+
+
+                <p class="description">Username: {{ user.username }}</p>
+
+
+                <div class="buttons">
+{#                    <a href="{% url 'rents_page' pk=rents.id %}" class="contact-us-box button">Rents</a>#}
+                    <a href="{% url 'edit_profile' pk=user.id %}" class="edit-button">Edit</a>
+                    <a href="{% url 'delete_profile' pk=user.id %}" class="delete-button">Delete</a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

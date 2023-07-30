@@ -1,11 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.templatetags.static import static
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic as views
 from django.contrib.auth import views as auth_views, login, get_user_model
-from .forms import RegisterUserForm, LoginUserForm
-
+from .forms import RegisterUserForm, LoginUserForm, EditUserForm
 
 
 # Create your views here.
@@ -34,7 +33,6 @@ class RegisterUserView(views.CreateView):
     def form_valid(self, form):
         result = super().form_valid(form)
 
-
         login(self.request, self.object)
 
         return result
@@ -44,7 +42,6 @@ class LoginUserView(auth_views.LoginView):
     template_name = 'login_page.html'
     form = LoginUserForm
     success_url = reverse_lazy('index_page')
-
 
 
 class LogoutUserView(auth_views.LogoutView):
@@ -60,22 +57,38 @@ class DetailsProfileView(views.DetailView):
     template_name = 'details_profile.html'
     model = get_user_model()
 
-    def get_context_data(self, **kwargs):
-        profile_image = static('images/profile_image.jpg')
-
-        if self.object.profile_image is not None:
-            profile_image = self.object.profile_image
-
-        context = super().get_context_data(**kwargs)
-        context['profile_image'] = profile_image
-        return context
+    # def get_context_data(self, **kwargs):
+    #     profile_image = static('images/profile_image.jpg')
+    #
+    #     if self.object.profile_picture is not None:
+    #         profile_image = self.object.profile_image
+    #
+    #     context = super().get_context_data(**kwargs)
+    #     context['profile_image'] = profile_image
+    #     return context
 
 
 class ProfileEditView(views.UpdateView):
     template_name = 'edit_profile.html'
+    form_class = EditUserForm
     model = get_user_model()
-    fields = ('username', 'email')
-    success_url = reverse_lazy('index_page')
+
+    def get_success_url(self):
+        # Redirect to 'details_profile' URL with the updated user's pk
+        return reverse('details_profile', kwargs={'pk': self.kwargs['pk']})
+
+    def get_form(self, form_class=None):
+        # Use the form specified in form_class attribute
+        form = super().get_form(form_class=self.form_class)
+        # Specify the fields you want to include in the form
+        form.fields = {
+            'username': form.fields['username'],
+            'email': form.fields['email'],
+            'first_name': form.fields['first_name'],
+            'last_name': form.fields['last_name'],
+            'profile_picture': form.fields['profile_picture'],
+        }
+        return form
 
 
 class ProfileDeleteView(views.DeleteView):

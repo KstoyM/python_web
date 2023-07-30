@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Group
 from django.core import exceptions
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -68,12 +69,17 @@ class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
     )
 
     first_name = models.CharField(
+        blank=False,
+        null=False,
         max_length=FIRST_NAME_MAX_LEN,
         validators=(MinLengthValidator(FIRST_NAME_MIN_LEN),
                     validate_string_only_letters)
+
     )
 
     last_name = models.CharField(
+        blank=False,
+        null=False,
         max_length=LAST_NAME_MAX_LEN,
         validators=(MinLengthValidator(LAST_NAME_MIN_LEN)
                     , validate_string_only_letters)
@@ -81,5 +87,6 @@ class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
 
     email = models.EmailField(unique=True)
     age = models.PositiveIntegerField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
+    profile_picture = models.URLField(blank=True, null=True)
     is_staff = models.BooleanField(default=False)
+    groups = models.ManyToManyField(Group, blank=True)
