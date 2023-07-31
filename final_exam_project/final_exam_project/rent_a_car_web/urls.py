@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import index_page, rents_page, ContactPageView, AddCars, \
-    add_rent, details_rent, edit_rent, delete_rent, CarsPageView, rent_car_view
+from .views import index_page, ContactPageView, AddCars, \
+    edit_rent, delete_rent, CarsPageView, rent_car_view, rent_history
 
 urlpatterns = [
 
@@ -13,9 +13,8 @@ urlpatterns = [
         path('rent_car_view/<int:pk>/', rent_car_view, name='rent_car_view'),
     ])),
 
-    path('rents/', include([
-        path('', rents_page, name='rents_page'),
-        path('details/<int:pk>/', details_rent, name='details_rent'),
+    path('rent_history/', include([
+        path('', rent_history, name='rents_history'),
         path('edit/<int:pk>/', edit_rent, name='edit_rent'),
         path('delete/<int:pk>/', delete_rent, name='delete_rent'),
     ])),

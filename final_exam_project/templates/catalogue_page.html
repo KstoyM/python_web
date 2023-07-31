@@ -15,7 +15,7 @@
                     </div>
                     <div class="sign_btn">
                         <!-- Add data-toggle and data-target attributes to trigger the modal -->
-                        <a href="#" class="btn btn-primary rent-btn" data-car-id="{{ car.id }}"
+                        <a href="#" class="sign_btn btn-primary rent-btn" data-car-id="{{ car.id }}"
                            data-car-pk="{{ car.pk }}" data-toggle="modal"
                            data-target="#rentModal">Rent</a>
 
@@ -25,13 +25,6 @@
         </div>
     {% endfor %}
 
-    {% if messages %}
-        <div class="alert alert-success">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    {% endif %}
 
     <!-- Modal -->
     <div class="modal fade" id="rentModal" tabindex="-1" role="dialog" aria-labelledby="rentModalLabel"
@@ -55,24 +48,57 @@
 
     <script>
         $(document).ready(function () {
-
+            // Handle the rent button click event
             $('.rent-btn').click(function () {
                 var carPk = $(this).data('car-pk');
-                var form = $('#rentForm');
 
+                // Set the form action URL using the car PK
+                $('#rentForm').attr('action', '{% url 'rent_car_view' pk=123 %}'.replace('123', carPk));
 
-                form.attr('action', '{% url 'rent_car_view' pk=123 %}'.replace('123', carPk));
+                // Clear previous input values and errors
+                $('#rentForm').find('input[type="date"]').val('').removeClass('is-invalid');
+                $('#dateFromValidationMessage').text(''); // Clear date from error message
+                $('#dateToValidationMessage').text('');   // Clear date to error message
 
-
-                form.find('input[type="date"]').val('');
-
-
+                // Show the modal
                 $('#rentModal').modal('show');
+            });
+
+            // Attach the submit event listener to the form after the modal is shown
+            $('#rentModal').on('shown.bs.modal', function () {
+                var form = $('#rentForm');
+                var dateFromInput = $('input[name="date_from"]');
+                var dateToInput = $('input[name="date_to"]');
+
+                form.on('submit', function (event) {
+                    // Parse the date inputs to Date objects
+                    var dateFrom = new Date(dateFromInput.val());
+                    var dateTo = new Date(dateToInput.val());
+
+                    // Get the current date
+                    var currentDate = new Date();
+
+                    // Check if the dates have already passed
+                    if (dateFrom < currentDate || dateTo < currentDate) {
+                        // Prevent the form from submitting
+                        event.preventDefault();
+
+                        // Display the validation message
+                        var validationMessage = "The selected dates have already passed.";
+                        dateFromInput.addClass('is-invalid');
+                        dateToInput.addClass('is-invalid');
+
+                        // Update error messages
+                        if (dateFrom < currentDate) {
+                            $('#dateFromValidationMessage').text(validationMessage);
+                        }
+                        if (dateTo < currentDate) {
+                            $('#dateToValidationMessage').text(validationMessage);
+                        }
+                    }
+                });
             });
         });
     </script>
 
-
-
 {% endblock %}
-

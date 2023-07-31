@@ -1,3 +1,6 @@
+from urllib import request
+
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -7,11 +10,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views import generic
 
-from .models import Car, RentCar
+from .models import Car
+from .. import settings
 
 
 def index_page(request):
-    return render(request, 'index.html')
+    cars = Car.objects.all()
+
+    context = {
+        'cars': cars,
+    }
+
+    return render(request, 'index.html', context=context)
 
 
 class AddCars(UserPassesTestMixin, views.CreateView):
@@ -36,21 +46,15 @@ class CarsPageView(View):
         return render(request, self.template_name, {'cars': cars})
 
 
-def rents_page(request):
-    return render(request, 'rents.html')
-
-
 def rent_car_view(request, pk):
-    print("pk value: ", pk)
+
     car = get_object_or_404(Car, pk=pk)
 
     if request.method == 'POST':
         form = RentCarForm(request.POST, car=car)
         if form.is_valid():
-            form.instance.user = request.user  # Set the user instance for the form
+            form.instance.user = request.user
             form.save()
-
-            messages.success(request, f"Car {car.make} has been successfully rented! Total price: {form.cleaned_data['total_price']} EUR")
 
             return redirect('index_page')
 
@@ -68,24 +72,24 @@ class ContactPageView(View):
         form = ContactUsForm(request.POST)
         if form.is_valid():
             form.save()
+
+            name = form.cleaned_data['full_name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+
+            from_email = email if email else settings.EMAIL_HOST_USER
+            to_email = [settings.EMAIL_HOST_USER]
+            message = f'Name: {name}\nEmail: {email}\nMessage: {message}'
+            send_mail(subject, message, from_email, to_email, fail_silently=False)
+
             return redirect('index_page')
 
         return render(request, self.template_name, {'form': form})
 
 
-def add_car(request):
-    return render(request, 'add_car.html')
-
-
-1
-
-
-def add_rent(request):
-    return render(request, 'add_rent.html')
-
-
-def details_rent(request):
-    return render(request, 'details_rent.html')
+def rent_history(request):
+    return render(request, 'rent_history.html')
 
 
 def edit_rent(request):

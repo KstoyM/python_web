@@ -1,92 +1,81 @@
-
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!-- end header inner -->
-<!-- end header -->
-<!-- banner -->
-<section class="banner_main">
-    <div class="container">
-        <div class="row d_flex">
-            <div class="col-md-12">
-                <div class="text-bg">
-                    <h1>Find best car in Varna for rent</h1>
-                    <strong>Softuni Exam Project 2023</strong>
+    <!-- end header inner -->
+    <!-- end header -->
+    <!-- banner -->
+    <section class="banner_main">
+        <div class="container">
+            <div class="row d_flex">
+                <div class="col-md-12">
+                    <div class="text-bg">
+                        <h1>Find best car in Varna for rent</h1>
+                        <strong>Softuni Exam Project 2023</strong>
                         <a href="https://softuni.bg/curriculum">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- end banner -->
+    <!-- car -->
+    <div class="car">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="titlepage">
+                        <h2>VARIETY OF CARS</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for car in cars %}
+                    <div class="col-md-4">
+                        <div class="car_box">
+                            <figure><img src="{{ car.image }}" alt="hyundai_picture"/></figure>
+                            <a href="{% url 'catalogue_page' %}"><h3>{{ car.make }}</h3></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="choose ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="titlepage">
+                        <h2>Why Choose Us</h2>
+                        <span>It is a long established fact that a reader will be distracted by the readable content of a page when<br> looking at its layout. The point of using </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="choose_box">
+                        <span>01</span>
+                        <p> Fast and reliable cars! </p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="choose_box">
+                        <span>02</span>
+                        <p> The best customer service you will ever find. We always cater to our clients
+                            needs with utmost care. </p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="choose_box">
+                        <span>03</span>
+                        <p> Easy payments and timely refunds if you are unable to get your car! </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- end banner -->
-<!-- car -->
-<div class="car">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="titlepage">
-                    <h2>VARIETY OF CARS </h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 padding_leri">
-                <div class="car_box">
-                    <figure><img src="{% static 'images/car_img1.png'%}" alt="hyundai_picture"/></figure>
-                    <h3>Hyundai</h3>
-                </div>
-            </div>
-            <div class="col-md-4 padding_leri">
-                <div class="car_box">
-                    <figure><img src="{% static 'images/car_img2.png' %}" alt="audi_picture"/></figure>
-                    <h3>Audi</h3>
-                </div>
-            </div>
-            <div class="col-md-4 padding_leri">
-                <div class="car_box">
-                    <figure><img src="{% static 'images/car_img3.png'%}" alt="bmw_picture"/></figure>
-                    <h3>Bmw x5</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="choose ">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="titlepage">
-                    <h2>Why Choose Us</h2>
-                    <span>It is a long established fact that a reader will be distracted by the readable content of a page when<br> looking at its layout. The point of using </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="choose_box">
-                    <span>01</span>
-                    <p> Fast and reliable cars! </p>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="choose_box">
-                    <span>02</span>
-                    <p> The best customer service you will ever find. We always cater to our clients
-                        needs with utmost care. </p>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="choose_box">
-                    <span>03</span>
-                    <p> Easy payments and timely refunds if you are unable to get your car! </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--  footer -->
+    <!--  footer -->
 
 {% endblock %}
