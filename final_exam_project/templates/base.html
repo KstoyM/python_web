@@ -65,7 +65,7 @@
                                         <a class="nav-link" href="{% url "contact_page" %}">Contact us</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{% url "rents_history" %}"> Rents History </a>
+                                        <a class="nav-link" href="{% url "rents_history" request.user.pk %}"> Rents History </a>
                                     </li>
                                      <li class="nav-item">
                                         <a class="nav-link"

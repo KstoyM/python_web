@@ -217,33 +217,6 @@ button {
 
 /**-- heading section --**/
 
-
-/*---------------------------- preloader area ----------------------------*/
-
-.loader_bg {
-    position: fixed;
-    z-index: 9999999;
-    background: #fff;
-    width: 100%;
-    height: 100%;
-}
-
-.loader {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.loader img {
-    width: 280px;
-}
-
-
 /*-- navigation--*/
 
 .navigation.navbar {
@@ -478,98 +451,6 @@ button {
 /** end car section **/
 
 
-/** bestCar section **/
-
-.bestCar {
-    margin-top: 90px;
-    background: url(../images/bg.jpg);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    padding: 100px 0
-}
-
-.bestCar .titlepage h2 {
-    color: #181818;
-    font-size: 30px;
-    text-transform: none;
-    line-height: 40px;
-}
-
-.main_form {
-    padding: 50px 0px 50px 40px;
-}
-
-.bestCar .main_form .contactus {
-    border: #acacac solid 2px;
-    padding: 0px 19px;
-    margin-bottom: 20px;
-    width: 100%;
-    height: 60px;
-    background: #fff;
-    color: #000;
-    font-size: 18px;
-    font-weight: normal;
-}
-
-.bestCar .main_form .find_btn {
-    font-family: 'Righteous', cursive;
-    font-size: 17px;
-    transition: ease-in all 0.5s;
-    background-color: #000;
-    color: #fff;
-    padding: 13px 0px;
-    margin: 0 auto;
-    max-width: 200px;
-    width: 100%;
-    display: block;
-    margin-top: 30px;
-}
-
-.bestCar .main_form .find_btn:hover {
-    background-color: #f6d601;
-    transition: ease-in all 0.5s;
-    color: #000;
-    border-radius: 26px;
-}
-
-#request *::placeholder {
-    color: #4d4d4f;
-    opacity: 1;
-}
-
-.main_form {
-    padding: 50px 50px 50px 40px;
-    background: #fff;
-}
-
-.nice-select {
-    width: 100%;
-    border: #acacac solid 2px;
-    background: #fff;
-    margin-bottom: 25px;
-}
-
-.current {
-    color: #4d4d4f;
-    font-size: 17px;
-}
-
-.nice-select::after {
-    width: 10px;
-    height: 10px;
-}
-
-.nice-select .list {
-    background-color: #dcdcdc;
-    transition: ease-in all 0.3s;
-}
-
-.nice-select .option:hover,
-.nice-select .option.focus,
-.nice-select .option.selected.focus {
-    background-color: #eede36cf;
-}
-
 
 /** end bestCar section **/
 
@@ -632,52 +513,7 @@ button {
 }
 
 
-/** end Choose  section **/
-
-
-/** cutomer section **/
-
-.cutomer {
-    margin-top: 40px;
-    padding-bottom: 120px;
-    background: #23262d;
-    padding-top: 60px;
-}
-
-.cutomer .titlepage h2 {
-    color: #fff;
-}
-
-.cross_img {
-    margin-bottom: -55px;
-}
-
-.cross_img figure {
-    margin: 0;
-    position: relative;
-    z-index: 1;
-}
-
-.cutomer_box {
-    text-align: center;
-}
-
-.our {
-    background: #fff;
-    margin: 0px 40px;
-}
-
-.cross_layout {
-    transform: skew(-20deg);
-}
-
-.test_box {
-    padding: 40px 50px;
-    transform: skew(20deg);
-}
-
-/** end cutomer section **/
-
+/*!** end Choose  section **!*/
 
 /** footer **/
 

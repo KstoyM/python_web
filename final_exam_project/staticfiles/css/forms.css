@@ -67,20 +67,6 @@ label[for="female"] {
     margin-top: 10px;
 }
 
-/*input[type="number"],*/
-/*input[type="password"],*/
-/*input[type="email"],*/
-/*input[type="text"],*/
-/*input[type="url"],*/
-/*input[type="textarea"]{*/
-/*    background: #6d8d46b5;*/
-/*    padding: 20px 20px 20px 20px;*/
-/*    height: 50px;*/
-/*    margin-top: 10px;*/
-/*    font-size: 17px;*/
-/*    border-radius: 50px;*/
-/*    box-shadow: inset 6px 6px 6px #c0c2c5, inset -6px -6px 6px white;*/
-/*}*/
 
 
 select {
@@ -149,3 +135,29 @@ label[for="terms"] > select{
     color: red
 }
 
+
+/* Custom CSS for the div wrapper */
+.table-wrapper {
+    border-radius: 10px;
+    border: 1px solid #02253e;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.table-wrapper table td:first-child,
+.table-wrapper table th:first-child {
+    padding-left: 75px;
+}
+
+.table-wrapper table td:last-child,
+.table-wrapper table th:last-child {
+    padding-right: 5px;
+}
+
+/* Media query to adjust the wrapper width for smaller screens */
+@media (max-width: 768px) {
+    .table-wrapper {
+        width: 90%; /* Adjust the width for smaller screens */
+    }
+}

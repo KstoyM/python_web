@@ -1,16 +1,13 @@
 from urllib import request
-
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views import generic as views
 from .forms import ContactUsForm, CarForm, RentCarForm
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.views import generic
-
-from .models import Car
+from django.views import generic as views
+from .models import Car, RentCar
 from .. import settings
 
 
@@ -47,7 +44,6 @@ class CarsPageView(View):
 
 
 def rent_car_view(request, pk):
-
     car = get_object_or_404(Car, pk=pk)
 
     if request.method == 'POST':
@@ -88,13 +84,20 @@ class ContactPageView(View):
         return render(request, self.template_name, {'form': form})
 
 
-def rent_history(request):
-    return render(request, 'rent_history.html')
+def rent_history(request, pk):
+
+    rents_history = RentCar.objects.filter(user_id=pk)
+
+    context = {
+        'rents_history': rents_history,
+    }
+
+    return render(request, 'rents_history.html', context=context)
 
 
 def edit_rent(request):
     return render(request, 'edit_rent.html')
 
 
-def delete_rent(request):
-    return render(request, 'delete_rent.html')
+class DeleteRentView(views.DeleteView):
+    pass
