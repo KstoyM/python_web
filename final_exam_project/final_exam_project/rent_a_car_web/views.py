@@ -1,5 +1,5 @@
-from urllib import request
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -28,7 +28,7 @@ class AddCars(UserPassesTestMixin, views.CreateView):
     success_url = reverse_lazy('index_page')
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Admin').exists()
+        return self.request.user.groups.filter(Q(name='Superuser') | Q(name='Is_Staff')).exists()
 
     def form_valid(self, form):
         messages.success(self.request, 'Car added successfully!')

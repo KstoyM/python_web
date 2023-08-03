@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -25,3 +26,8 @@ def send_successful_registration_email(user):
 def user_created(instance, created, **kwargs):
     if created:
         send_successful_registration_email(instance)
+        # regular_user_group = Group.objects.get(name='Regular_User')
+        #
+        # instance.groups.add(regular_user_group)  # Conflicts with assigning user roles from the admin panel
+
+
