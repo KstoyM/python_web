@@ -1,6 +1,7 @@
 <div class="modal-body">
     <form id="rentForm" method="post">
         {% csrf_token %}
+        <input type="hidden" name="car_id" value="">
         <div class="form-group">
             <label for="date_from">From</label>
             <input type="date" name="date_from" class="form-control" required>
@@ -11,6 +12,8 @@
             <input type="date" name="date_to" class="form-control" required>
             <div class="invalid-feedback" id="dateToValidationMessage"></div>
         </div>
+        <div id="error-message" class="text-danger"></div>
         <button type="submit" class="btn btn-primary">Rent Now</button>
     </form>
+
 </div>

@@ -18,87 +18,31 @@
                         <a href="#" class="sign_btn btn-primary rent-btn" data-car-id="{{ car.id }}"
                            data-car-pk="{{ car.pk }}" data-toggle="modal"
                            data-target="#rentModal">Rent</a>
-
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
 
-
     <!-- Modal -->
     <div class="modal fade" id="rentModal" tabindex="-1" role="dialog" aria-labelledby="rentModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rentModalLabel">Rent Car</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {% include 'rent_car_modal.html' %}
-            </div>
+         aria-hidden="true" data-rent-url="{% url 'rent_car_view' pk=0 %}"
+         data-check-car-url="{% url 'check_car_availability' %}">
+        <div class=" modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="rentModalLabel">Rent Car</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+        {% include 'rent_car_modal.html' %}
+    </div>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            // Handle the rent button click event
-            $('.rent-btn').click(function () {
-                var carPk = $(this).data('car-pk');
-
-                // Set the form action URL using the car PK
-                $('#rentForm').attr('action', '{% url 'rent_car_view' pk=123 %}'.replace('123', carPk));
-
-                // Clear previous input values and errors
-                $('#rentForm').find('input[type="date"]').val('').removeClass('is-invalid');
-                $('#dateFromValidationMessage').text(''); // Clear date from error message
-                $('#dateToValidationMessage').text('');   // Clear date to error message
-
-                // Show the modal
-                $('#rentModal').modal('show');
-            });
-
-            // Attach the submit event listener to the form after the modal is shown
-            $('#rentModal').on('shown.bs.modal', function () {
-                var form = $('#rentForm');
-                var dateFromInput = $('input[name="date_from"]');
-                var dateToInput = $('input[name="date_to"]');
-
-                form.on('submit', function (event) {
-                    // Parse the date inputs to Date objects
-                    var dateFrom = new Date(dateFromInput.val());
-                    var dateTo = new Date(dateToInput.val());
-
-                    // Get the current date
-                    var currentDate = new Date();
-
-                    // Check if the dates have already passed
-                    if (dateFrom < currentDate || dateTo < currentDate) {
-                        // Prevent the form from submitting
-                        event.preventDefault();
-
-                        // Display the validation message
-                        var validationMessage = "The selected dates have already passed.";
-                        dateFromInput.addClass('is-invalid');
-                        dateToInput.addClass('is-invalid');
-
-                        // Update error messages
-                        if (dateFrom < currentDate) {
-                            $('#dateFromValidationMessage').text(validationMessage);
-                        }
-                        if (dateTo < currentDate) {
-                            $('#dateToValidationMessage').text(validationMessage);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="{% static 'js/rent_car.js' %}"></script>
 
 {% endblock %}

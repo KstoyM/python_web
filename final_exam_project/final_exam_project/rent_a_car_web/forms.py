@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import ContactUs, Car, RentCar
 
 
@@ -43,11 +45,15 @@ class RentCarForm(forms.ModelForm):
         date_from = cleaned_data.get('date_from')
         date_to = cleaned_data.get('date_to')
 
-        if date_from and date_to:
-            num_days = (date_to - date_from).days
-            car_price_per_day = self.car.price
-            total_price = car_price_per_day * num_days
-            cleaned_data['total_price'] = total_price
+        if date_from and date_to and self.car:
+            overlapping_rentals = RentCar.objects.filter(
+                car=self.car,
+                date_from__lt=date_to,
+                date_to__gt=date_from,
+            )
+
+            if overlapping_rentals.exists():
+                raise ValidationError("This car is already rented for the selected dates.")
 
         return cleaned_data
 

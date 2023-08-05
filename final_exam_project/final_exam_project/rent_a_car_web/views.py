@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -43,7 +44,7 @@ class CarsPageView(View):
         return render(request, self.template_name, {'cars': cars})
 
 
-def rent_car_view(request, pk):
+def rent_car_view(request, pk, form=None):
     car = get_object_or_404(Car, pk=pk)
 
     if request.method == 'POST':
@@ -52,9 +53,16 @@ def rent_car_view(request, pk):
             form.instance.user = request.user
             form.save()
 
+            messages.success(request, 'Car rented successfully!')
             return redirect('index_page')
 
-    return redirect('catalogue_page')
+    else:
+        if form.errors:
+            messages.error(request, 'Unable to rent the car. Please check the dates and try again.')
+        else:
+            messages.error(request, 'This car is already rented for the selected dates.')
+
+    return render(request, 'catalogue_page.html', {'cars': Car.objects.all(), 'form': RentCarForm()})
 
 
 class ContactPageView(View):
@@ -101,3 +109,23 @@ def edit_rent(request):
 
 class DeleteRentView(views.DeleteView):
     pass
+
+
+def check_car_availability(request):
+
+    if request.method == 'POST':
+        car_id = request.POST.get('car_id')
+        date_from = request.POST.get('date_from')
+        date_to = request.POST.get('date_to')
+
+        try:
+            car = Car.objects.get(pk=car_id)
+            if car.is_car_rented(date_from, date_to):
+                return JsonResponse({'available': False})
+            else:
+                return JsonResponse({'available': True})
+        except Car.DoesNotExist:
+
+            return JsonResponse({'available': False})
+
+    return JsonResponse({'available': False})
