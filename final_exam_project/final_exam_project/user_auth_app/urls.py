@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from .views import RegisterUserView, LoginUserView, LogoutUserView, DetailsProfileView, ProfileEditView, \
-    ProfileDeleteView
+    ProfileDeleteView, ChangePasswordView
 
 urlpatterns = [
     path('login/', LoginUserView.as_view(), name='login_user'),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('profile/<int:pk>/', include([
         path('', DetailsProfileView.as_view(), name='details_profile'),
         path('edit/', ProfileEditView.as_view(), name='edit_profile'),
-        path('delete/', ProfileDeleteView.as_view(), name='delete_profile')
+        path('delete/', ProfileDeleteView.as_view(), name='delete_profile'),
+        path('change_password/', ChangePasswordView.as_view(), name='change_password'),
     ])),
 ]

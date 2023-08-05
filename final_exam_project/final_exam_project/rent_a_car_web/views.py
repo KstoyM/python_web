@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import JsonResponse
@@ -36,6 +38,16 @@ class AddCars(UserPassesTestMixin, views.CreateView):
         return super().form_valid(form)
 
 
+def are_dates_valid(date_from, date_to):
+    try:
+        date_from = datetime.strptime(date_from, '%Y-%m-%d')
+        date_to = datetime.strptime(date_to, '%Y-%m-%d')
+    except ValueError:
+        return False
+
+    return date_to > date_from
+
+
 class CarsPageView(View):
     template_name = 'catalogue_page.html'
 
@@ -43,8 +55,15 @@ class CarsPageView(View):
         cars = Car.objects.all()
         return render(request, self.template_name, {'cars': cars})
 
+    def post(self, request):
+        date_from = request.POST.get('date_from')
+        date_to = request.POST.get('date_to')
 
-def rent_car_view(request, pk, form=None):
+        if not are_dates_valid(date_from, date_to):
+            return JsonResponse({'error': 'Invalid dates'}, status=400)
+
+
+def rent_car_view(request, pk):
     car = get_object_or_404(Car, pk=pk)
 
     if request.method == 'POST':
@@ -53,16 +72,27 @@ def rent_car_view(request, pk, form=None):
             form.instance.user = request.user
             form.save()
 
-            messages.success(request, 'Car rented successfully!')
             return redirect('index_page')
 
-    else:
-        if form.errors:
-            messages.error(request, 'Unable to rent the car. Please check the dates and try again.')
-        else:
-            messages.error(request, 'This car is already rented for the selected dates.')
-
     return render(request, 'catalogue_page.html', {'cars': Car.objects.all(), 'form': RentCarForm()})
+
+
+def check_car_availability(request):
+    if request.method == 'POST':
+        car_id = request.POST.get('car_id')
+        date_from = request.POST.get('date_from')
+        date_to = request.POST.get('date_to')
+
+        try:
+            car = Car.objects.get(pk=car_id)
+            if car.is_car_rented(date_from, date_to):
+                return JsonResponse({'available': False, 'error': 'This car is already rented for the selected dates.'})
+            else:
+                return JsonResponse({'available': True})
+        except Car.DoesNotExist:
+            return JsonResponse({'available': False, 'error': 'Invalid car ID.'})
+
+    return JsonResponse({'available': False, 'error': 'Invalid request method.'})
 
 
 class ContactPageView(View):
@@ -93,7 +123,6 @@ class ContactPageView(View):
 
 
 def rent_history(request, pk):
-
     rents_history = RentCar.objects.filter(user_id=pk)
 
     context = {
@@ -103,29 +132,10 @@ def rent_history(request, pk):
     return render(request, 'rents_history.html', context=context)
 
 
-def edit_rent(request):
-    return render(request, 'edit_rent.html')
-
-
 class DeleteRentView(views.DeleteView):
-    pass
+    model = RentCar
+    success_url = reverse_lazy('index_page')
 
-
-def check_car_availability(request):
-
-    if request.method == 'POST':
-        car_id = request.POST.get('car_id')
-        date_from = request.POST.get('date_from')
-        date_to = request.POST.get('date_to')
-
-        try:
-            car = Car.objects.get(pk=car_id)
-            if car.is_car_rented(date_from, date_to):
-                return JsonResponse({'available': False})
-            else:
-                return JsonResponse({'available': True})
-        except Car.DoesNotExist:
-
-            return JsonResponse({'available': False})
-
-    return JsonResponse({'available': False})
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Rent deleted successfully!')
+        return super().delete(request, *args, **kwargs)

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center">Delete Rent</h1>
+        <h3 class="text-center">Are you sure you want to delete
+            the rental of {{ object.car.make }} {{ object.car.car_model }}
+            rented from {{ object.date_from }} to {{ object.date_to }}?</h3>
+        <div class="d-flex justify-content-center my-3">
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">Confirm</button>
+            </form>
+            <a href="{% url 'index_page' %}" class="edit-button">Cancel</a>
+        </div>
+    </div>
+{% endblock %}

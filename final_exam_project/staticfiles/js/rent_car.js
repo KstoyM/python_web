@@ -1,23 +1,18 @@
 $(document).ready(function () {
-    // Handle the rent button click event
     $('.rent-btn').click(function () {
         var carPk = $(this).data('car-pk');
         var rentUrl = $('#rentModal').data('rent-url');
         $('#rentForm').attr('action', rentUrl.replace('0', carPk));
 
-        // Clear previous input values and errors
         $('#rentForm').find('input[type="date"]').val('').removeClass('is-invalid');
-        $('#dateFromValidationMessage').text(''); // Clear date from error message
-        $('#dateToValidationMessage').text('');   // Clear date to error message
+        $('#dateFromValidationMessage').text('');
+        $('#dateToValidationMessage').text('');
 
-        // Set the car_id value in the form
         $('#rentForm').find('input[name="car_id"]').val(carPk);
 
-        // Show the modal
         $('#rentModal').modal('show');
     });
 
-    // Attach the submit event listener to the form after the modal is shown
     $('#rentModal').on('shown.bs.modal', function () {
         var form = $('#rentForm');
         var dateFromInput = $('input[name="date_from"]');
@@ -49,6 +44,19 @@ $(document).ready(function () {
                 if (dateTo < currentDate) {
                     $('#dateToValidationMessage').text(validationMessage);
                 }
+
+            } else if (dateFrom > dateTo) { // Check if date_from is later than date_to
+                // Prevent the form from submitting
+                event.preventDefault();
+
+                // Display the validation message
+                var validationMessage = "The start date cannot be after the end date.";
+                dateFromInput.addClass('is-invalid');
+                dateToInput.addClass('is-invalid');
+
+                // Update error messages
+                $('#dateFromValidationMessage').text(validationMessage);
+                $('#dateToValidationMessage').text(validationMessage);
             } else {
                 // If the dates are valid, check if the car is available for rental
                 let checkCarUrl = $('#rentModal').data('check-car-url');

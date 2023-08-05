@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import index_page, ContactPageView, AddCars, \
-    edit_rent, DeleteRentView, CarsPageView, rent_car_view, rent_history, check_car_availability
+     DeleteRentView, CarsPageView, rent_car_view, rent_history, check_car_availability
 
 urlpatterns = [
 
@@ -15,7 +15,6 @@ urlpatterns = [
     ])),
 
     path('rent_history/<int:pk>/', rent_history, name='rents_history'),
-    path('edit_rent/<int:pk>/', edit_rent, name='edit_rent'),
     path('delete_rent/<int:pk>/', DeleteRentView.as_view(), name='delete_rent'),
 
     path('contact/', ContactPageView.as_view(), name='contact_page'),

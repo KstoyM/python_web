@@ -16,11 +16,13 @@
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
 
 
-                <p class="description">Username: {{ user.username }}</p>
+                <h1>Username: {{ user.username }}</h1>
+                <h1>Email: {{ user.email }}</h1>
+                <h1>Age: {{ user.age }}</h1>
 
 
                 <div class="buttons">
-{#                    <a href="{% url 'rents_page' pk=rents.id %}" class="contact-us-box button">Rents</a>#}
+                    <a href="{% url 'change_password' pk=user.id %}" class="edit-button">Change Password</a>
                     <a href="{% url 'edit_profile' pk=user.id %}" class="edit-button">Edit</a>
                     <a href="{% url 'delete_profile' pk=user.id %}" class="delete-button">Delete</a>
                 </div>
