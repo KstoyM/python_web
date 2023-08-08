@@ -11,7 +11,7 @@ services:
     env_file:
       - ./envs/.env
     volumes:
-      - /tmp/app-resources/static:/app/static_files
+      - /tmp/app-resources/static:/app/static
     platform: linux/amd64
     command: gunicorn --bind=0.0.0.0:8000 final_exam_project.wsgi:application
     links:

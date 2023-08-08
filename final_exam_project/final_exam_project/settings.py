@@ -28,6 +28,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(' ')
+CSRF_TRUSTED_ORIGINS = [f'http://{x}:81' for x in os.environ.get("ALLOWED_HOSTS", "").split(" ")]
 
 # Application definition
 
@@ -87,7 +88,6 @@ DATABASES = {
         "PORT": os.getenv('DB_PORT', '5432'),
     }
 }
-print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -127,7 +127,7 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 
-STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
+STATIC_ROOT = os.environ.get('STATIC_ROOT', BASE_DIR / 'static')
 
 
 # Default primary key field type
