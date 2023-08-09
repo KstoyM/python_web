@@ -14,9 +14,10 @@ class UserGroupInline(admin.TabularInline):
 
 @admin.register(UserModel)
 class UserModelAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser']
+    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser', ]
     list_filter = ['is_staff', 'is_superuser', 'groups']
     inlines = (UserGroupInline,)
+
 
 
 class CustomGroupAdmin(admin.ModelAdmin):

@@ -1,6 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
-
 from .models import ContactUs, Car, RentCar
 
 
@@ -27,7 +25,7 @@ class CarForm(forms.ModelForm):
         self.fields['make'].widget.attrs.update({'placeholder': 'Car make'})
         self.fields['car_model'].widget.attrs.update({'placeholder': 'Car model'})
         self.fields['horsepower'].widget.attrs.update({'placeholder': 'Car horsepower'})
-        self.fields['price'].widget.attrs.update({'placeholder': 'Car price'})
+        self.fields['price'].widget.attrs.update({'placeholder': 'Car price per day'})
         self.fields['image'].widget.attrs.update({'placeholder': 'Car image'})
 
 
@@ -39,23 +37,6 @@ class RentCarForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.car = kwargs.pop('car', None)
         super().__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        date_from = cleaned_data.get('date_from')
-        date_to = cleaned_data.get('date_to')
-
-        if date_from and date_to and self.car:
-            overlapping_rentals = RentCar.objects.filter(
-                car=self.car,
-                date_from__lt=date_to,
-                date_to__gt=date_from,
-            )
-
-            if overlapping_rentals.exists():
-                raise ValidationError("This car is already rented for the selected dates.")
-
-        return cleaned_data
 
     def save(self, commit=True):
         rent_car = super().save(commit=False)

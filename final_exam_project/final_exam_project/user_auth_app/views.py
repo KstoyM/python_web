@@ -1,4 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy, reverse
 from django.views import generic as views
 from django.contrib.auth import views as auth_views, login, get_user_model
@@ -28,15 +30,21 @@ class LogoutUserView(auth_views.LogoutView):
     next_page = reverse_lazy('index_page')
 
 
-class DetailsProfileView(views.DetailView):
+class DetailsProfileView(LoginRequiredMixin, views.DetailView):
     template_name = 'details_profile.html'
     model = get_user_model()
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class ProfileEditView(views.UpdateView):
     template_name = 'edit_profile.html'
     form_class = EditUserForm
     model = get_user_model()
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def get_success_url(self):
         # Redirect to 'details_profile' URL with the updated user's pk

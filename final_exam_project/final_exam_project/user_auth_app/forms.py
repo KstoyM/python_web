@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms, get_user_model
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 UserModel = get_user_model()
 
@@ -12,12 +13,11 @@ class RegisterUserForm(auth_forms.UserCreationForm):
 
     class Meta:
         model = UserModel
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'age', 'password1', 'password2')
         labels = {
             'username': 'Username',
             'email': 'Email',
-            'first_name': 'First Name',
-            'last_name': 'Last Name',
+            'age': 'Age',
             'password1': 'Password',
             'password2': 'Confirm Password',
         }

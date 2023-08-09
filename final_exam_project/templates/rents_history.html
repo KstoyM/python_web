@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% csrf_token %}
 {% block content %}
+
+    {% if messages %}
+        <div class="container mt-4">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="container mt-5">
         <h1>Rental History</h1>
         <div class="table-wrapper">
@@ -13,17 +25,26 @@
                     <th>Car Model</th>
                     <th>Date From</th>
                     <th>Date To</th>
+                    <th>Duration</th>
+                    <th>Total Price</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for rent in rents_history %}
+                {% for rent in page_obj %}
                     <tr>
                         <td>{{ rent.user.username }}</td>
                         <td>{{ rent.car.make }}</td>
                         <td>{{ rent.car.car_model }}</td>
                         <td>{{ rent.date_from }}</td>
                         <td>{{ rent.date_to }}</td>
+                        {% if rent.duration == 1 %}
+                        <td>{{ rent.duration }} Day</td>
+                        {% else %}
+                        <td>{{ rent.duration }} Days</td>
+                        {% endif %}
+                        <td>{{ rent.total_price | floatformat:2 }} EUR</td>
+
                         <td>
                             <a href="{% url 'delete_rent' rent.pk %}" class="delete-button2">Delete</a>
                         </td>
@@ -33,4 +54,47 @@
             </table>
         </div>
     </div>
+
+    <div class="pagination justify-content-center mt-4">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                    </li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+
+
 {% endblock %}

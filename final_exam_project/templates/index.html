@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="row">
-                {% for car in cars %}
+                {% for car in cars|slice:":6" %}
                     <div class="col-md-4">
                         <div class="car_box">
                             <figure><img src="{{ car.image }}" alt="hyundai_picture"/></figure>

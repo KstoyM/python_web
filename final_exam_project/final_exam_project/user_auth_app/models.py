@@ -18,6 +18,11 @@ def validate_string_only_letters(value):
             raise exceptions.ValidationError('Ensure this value contains only letters.')
 
 
+def validate_min_age(value):
+    if value < 18:
+        raise exceptions.ValidationError('You must be at least 18 years old to register.')
+
+
 class AppUserManager(auth_models.BaseUserManager):
     use_in_migrations = True
 
@@ -69,8 +74,8 @@ class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
     )
 
     first_name = models.CharField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         max_length=FIRST_NAME_MAX_LEN,
         validators=(MinLengthValidator(FIRST_NAME_MIN_LEN),
                     validate_string_only_letters)
@@ -78,15 +83,15 @@ class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
     )
 
     last_name = models.CharField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         max_length=LAST_NAME_MAX_LEN,
         validators=(MinLengthValidator(LAST_NAME_MIN_LEN)
                     , validate_string_only_letters)
     )
 
     email = models.EmailField(unique=True)
-    age = models.PositiveIntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField(null=False, blank=False, validators=(validate_min_age,))
     profile_picture = models.URLField(blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, blank=True)

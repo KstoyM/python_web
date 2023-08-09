@@ -1,10 +1,12 @@
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from .forms import ContactUsForm, CarForm, RentCarForm
 from django.contrib import messages
@@ -55,16 +57,10 @@ class CarsPageView(View):
         cars = Car.objects.all()
         return render(request, self.template_name, {'cars': cars})
 
-    def post(self, request):
-        date_from = request.POST.get('date_from')
-        date_to = request.POST.get('date_to')
-
-        if not are_dates_valid(date_from, date_to):
-            return JsonResponse({'error': 'Invalid dates'}, status=400)
-
 
 def rent_car_view(request, pk):
     car = get_object_or_404(Car, pk=pk)
+    user_pk = request.user.pk
 
     if request.method == 'POST':
         form = RentCarForm(request.POST, car=car)
@@ -72,7 +68,10 @@ def rent_car_view(request, pk):
             form.instance.user = request.user
             form.save()
 
-            return redirect('index_page')
+            messages.success(request, 'Car rented successfully.')
+
+            redirect_url = reverse('rents_history', kwargs={'pk': user_pk})
+            return redirect(redirect_url)
 
     return render(request, 'catalogue_page.html', {'cars': Car.objects.all(), 'form': RentCarForm()})
 
@@ -122,11 +121,24 @@ class ContactPageView(View):
         return render(request, self.template_name, {'form': form})
 
 
+@login_required
 def rent_history(request, pk):
+    if request.user.pk != pk:
+        return HttpResponseForbidden("You don't have permission to access this page.")
+
     rents_history = RentCar.objects.filter(user_id=pk)
 
+    for rent in rents_history:
+        rent.duration = (rent.date_to - rent.date_from).days
+        rent.total_price = rent.duration * rent.car.price
+
+    paginator = Paginator(rents_history, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'rents_history': rents_history,
+        'page_obj': page_obj,
     }
 
     return render(request, 'rents_history.html', context=context)
