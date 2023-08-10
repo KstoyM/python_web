@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'final_exam_project.rent_a_car_web',
     'final_exam_project.user_auth_app.apps.UserAuthAppConfig',
+    'final_exam_project.user_auth_app.templatetags',
 ]
 
 MIDDLEWARE = [

@@ -19,8 +19,8 @@ def validate_string_only_letters(value):
 
 
 def validate_min_age(value):
-    if value < 18:
-        raise exceptions.ValidationError('You must be at least 18 years old to register.')
+    if value < 18 or value > 100:
+        raise exceptions.ValidationError('You must be between 18 and 100 years old to register.')
 
 
 class AppUserManager(auth_models.BaseUserManager):
@@ -93,5 +93,5 @@ class User(auth_models.AbstractUser, auth_models.PermissionsMixin):
     email = models.EmailField(unique=True)
     age = models.PositiveIntegerField(null=False, blank=False, validators=(validate_min_age,))
     profile_picture = models.URLField(blank=True, null=True)
-    is_staff = models.BooleanField(default=False)
+    user_permissions = models.ManyToManyField(auth_models.Permission, blank=True)
     groups = models.ManyToManyField(Group, blank=True)
