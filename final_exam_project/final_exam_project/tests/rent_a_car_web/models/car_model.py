@@ -6,6 +6,7 @@ from final_exam_project.user_auth_app.models import User
 
 User = get_user_model()
 
+
 class RentCarModelTest(TestCase):
     def setUp(self):
         self.car = Car.objects.create(
@@ -19,6 +20,7 @@ class RentCarModelTest(TestCase):
         self.user = User.objects.create(
             username='testuser',
             password='testpassword',
+            age=20,
         )
 
     def test_rent_car_model_creation(self):
@@ -37,7 +39,6 @@ class RentCarModelTest(TestCase):
         self.assertEqual(rent_car.user, self.user)
 
     def test_rent_car_model_fields_validation(self):
-
         with self.assertRaises(Exception):
             RentCar.objects.create(
                 date_from='2023-08-01',

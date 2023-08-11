@@ -1,5 +1,5 @@
 from django.test import TestCase
-from final_exam_project.rent_a_car_web.forms import ContactUsForm  # Replace 'myapp' with the actual name of your app
+from final_exam_project.rent_a_car_web.forms import ContactUsForm
 
 
 class ContactUsFormTest(TestCase):

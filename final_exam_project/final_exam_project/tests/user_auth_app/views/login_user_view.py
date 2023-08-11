@@ -9,7 +9,7 @@ User = get_user_model()
 class LoginUserViewTest(TestCase):
     def setUp(self):
         self.login_url = reverse('login_user')
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = User.objects.create_user(username='testuser', password='testpassword', age=20)
         self.login_data = {
             'username': 'testuser',
             'password': 'testpassword',

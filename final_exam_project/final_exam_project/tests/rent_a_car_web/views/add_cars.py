@@ -11,7 +11,7 @@ class AddCarsViewTest(TestCase):
     def setUpTestData(cls):
         cls.User = get_user_model()
 
-        cls.user = cls.User.objects.create_user(username='testuser', password='testpassword')
+        cls.user = cls.User.objects.create_user(username='testuser', password='testpassword', age=20)
         cls.superuser_group = Group.objects.create(name='Superuser')
         cls.staff_group = Group.objects.create(name='Is_Staff')
         cls.user.groups.add(cls.superuser_group)

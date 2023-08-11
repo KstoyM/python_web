@@ -7,7 +7,8 @@ class ProfileDeleteViewTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username='testuser',
-            password='testpassword'
+            password='testpassword',
+            age=20
         )
         self.client = Client()
         self.login_url = reverse('login_user')
